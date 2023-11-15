@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments/scripts::head}"></head>
+<body class="account-body accountbg">
+    <div th:replace="~{fragments/navigation::left-sidenave(${projects})}"></div>
+    <div class="page-wrapper">
+        <div th:replace="~{fragments/navigation::topbar}"></div>
+        <!-- Page Content-->
+        <div class="page-content">
+            <div class="container-fluid">
+                <!-- Page-Breadcrumb -->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="page-title-box">
+                            <div class="row">
+                                <div class="col">
+                                    <h4 class="page-title">Projects</h4>
+                                    <ol class="breadcrumb"></ol>
+                                </div><!--end col-->
+                                <div class="col-auto align-self-center">
+                                    <button class="btn btn-sm btn-outline-primary" data-bs-target="#newproject"
+                                            data-bs-toggle="modal"> New Project
+                                    </button>
+                                    <a href="#" class="btn btn-sm btn-outline-primary" id="Dash_Date">
+                                        <span class="day-name" id="Day_Name">Today:</span>&nbsp;
+                                        <span class="" id="Select_date">Jan 11</span>
+                                        <i data-feather="calendar" class="align-self-center icon-xs ms-1"></i>
+                                    </a>
+
+                                </div><!--end col-->
+                            </div><!--end row-->
+                        </div><!--end page-title-box-->
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <table id="datatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                    <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Description</th>
+                                        <th>Status</th>
+                                        <th>Current Release</th>
+                                        <th>Current Release Date</th>
+                                        <th style="width: 5%;">Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody th:if="${projects}">
+                                    <tr th:each="project : ${projects}">
+                                        <td><a th:href="@{/projects/{id}(id=${project.id})}"
+                                               th:text="${project.name}"></a></td>
+                                        <td th:text="${project.description}">System Architect</td>
+                                        <td th:text="${project.status}" class="text-capitalize">Edinburgh</td>
+                                        <td th:text=" ( (${project.currentRelease} == null)? 'None' : ${project.currentRelease.version})">
+                                            61
+                                        </td>
+                                        <td th:text=" ( (${project.currentRelease} == null)? 'None' : ${project.currentRelease.date})">
+                                            61
+                                        </td>
+                                        <td class="ps-3" style="width: 5%;">
+                                            <a class="link-primary me-2 ms-3"
+                                               th:href="@{/projects/{id}(id=${project.id})}"><i class="far fa-edit"></i></a>
+                                            <a class="link-danger"
+                                               style="cursor: pointer"
+                                               th:attr="onclick=|deleteProject('${project.id}','${project.name}')|"><i
+                                                    class="far fa-trash-alt"></i></a>
+
+                                        </td>
+
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div> <!-- end col -->
+                </div>
+
+            </div><!-- container -->
+
+            <footer th:replace="~{fragments/misc::footer}"></footer>
+        </div>
+        <!-- end page content -->
+    </div>
+
+    <span th:replace="~{/fragments/scripts::main}"/>
+    <span th:replace="~{/fragments/scripts::datatables}"/>
+    <!-- App js -->
+    <script src="/static/js/app.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#datatable').DataTable({
+                lengthMenu: [
+                    [20, 40, -1],
+                    [20, 50, 'All'],
+                ],
+            });
+        });
+    </script>
+    <div th:replace="~{/fragments/modals/project::new-project}"></div>
+    <script th:replace="~{/fragments/modals/project::delete-project}"></script>
+</body>
+</html>

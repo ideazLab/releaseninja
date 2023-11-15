@@ -1,0 +1,15 @@
+[
+  {
+    "name": "LifeFit",
+    "plugin": "nexus",
+    "status": "PENDING",
+    "security": {
+      "username": "maven",
+      "password": "CjHc&8TEhQK&snjj",
+      "url": "http://maven.fitltd.com",
+      "publicRepository": "maven-public",
+      "repository": "maven-releases",
+      "snapshotRepository": "maven-snapshots"
+    }
+  }
+]

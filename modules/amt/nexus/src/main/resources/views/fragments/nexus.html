@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div aria-hidden="true" aria-labelledby="myLargeModalLabel" class="modal fade bd-example-modal-lg" id="nexus-modal-id" role="dialog"
+     tabindex="-1" th:fragment="modal(plugin)">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title m-0" id="myLargeModalLabel" th:text="'New '+${plugin.displayName}"></h6>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+            </div>
+            <form action="#" id="nexus-new-amt">
+                <div class="modal-body">
+
+                    <div class="row" id="newNexusAMTError" style="display: none">
+                        <div class="col-md-12">
+                            <div class="mb-3 text-danger text-center">
+                                All fields are required
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <div class="col-md">
+                            <div class="form-floating">
+                                <input aria-describedby="emailHelp" class="form-control" id="nexusName" placeholder="Enter Service Name"
+                                       type="text">
+                                <label for="nexusUrl">Service Name</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <div class="col-md">
+                            <div class="form-floating">
+                                <input aria-describedby="emailHelp" class="form-control" id="nexusUrl" placeholder="Enter Nexus Server Url"
+                                       required
+                                       type="url">
+                                <label for="nexusUrl">Nexus Server Url</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <div class="col-md">
+                            <div class="form-floating">
+                                <input aria-describedby="nexusUsernameHelp" class="form-control" id="nexusUsername"
+                                       placeholder="Enter Nexus Username"
+                                       required
+                                       type="text">
+                                <label for="nexusUsername">Nexus Username</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <div class="col-md">
+                            <div class="form-floating">
+                                <input class="form-control" id="nexusPassword" placeholder="Enter Nexus Password"
+                                       required
+                                       type="password">
+                                <label for="nexusPassword">Nexus Password</label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-soft-primary btn-sm" type="submit">Save changes</button>
+                    <button class="btn btn-soft-danger btn-sm" id="nexus-new-amt-close" type="button">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript">
+        window.onload = function () {
+            let form = document.getElementById("nexus-new-amt");
+            let error = document.getElementById("newNexusAMTError")
+            let close = document.getElementById("nexus-new-amt-close")
+            let pristine = new Pristine(form);
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                if (pristine.validate() === true) {
+                    error.style.display = "none"
+                    $.ajax({
+                        method: "POST",
+                        url: "/plugins/amt/nexus",
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        contentType: 'application/json',
+                        data: JSON.stringify({
+                            name: document.getElementById("nexusName").value,
+                            url: document.getElementById("nexusUrl").value,
+                            username: document.getElementById("nexusUsername").value,
+                            password: document.getElementById("nexusPassword").value
+                        })
+                    }).fail(function (data) {
+                        error.innerText = data
+                        error.style.display = "block"
+                    }).done(function (result) {
+                        error.style.display = "none"
+                        console.log(result.success)
+                        if (result.success === true) {
+                            form.reset()
+                            $('#nexus-modal-id').modal('hide')
+                            Swal.fire({
+                                icon: 'success',
+                                title: result.message,
+                                showClass: {
+                                    popup: 'animate__animated animate__fadeInDown'
+                                },
+                                hideClass: {
+                                    popup: 'animate__animated animate__fadeOutUp'
+                                }
+                            }).then((result) => {
+                                location.reload();
+                            })
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: result.message,
+                                showClass: {
+                                    popup: 'animate__animated animate__fadeInDown'
+                                },
+                                hideClass: {
+                                    popup: 'animate__animated animate__fadeOutUp'
+                                }
+                            }).then((result) => {
+                                location.reload();
+                            })
+                        }
+                    });
+                } else {
+                    error.style.display = "block"
+                }
+            });
+            close.addEventListener('click', function (e) {
+                error.style.display = "none"
+                $('#nexus-modal-id').modal('hide')
+            })
+        }
+    </script>
+</div>
+</body>
+</html>

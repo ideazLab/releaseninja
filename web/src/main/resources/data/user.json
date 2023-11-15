@@ -1,0 +1,42 @@
+[
+  {
+    "username": "admin",
+    "name": "admin",
+    "surname": "Release Ninja",
+    "password": "password",
+    "role": "ADMIN",
+    "testData": false,
+    "accountNonExpired": false,
+    "accountNonLocked": false,
+    "credentialsNonExpired": false,
+    "enabled": true,
+    "email": "admin@ideazlab.co.uk"
+  },
+  {
+    "username": "client",
+    "name": "Client",
+    "surname": "Release Ninja",
+    "password": "password",
+    "role": "CLIENT",
+    "testData": false,
+    "accountNonExpired": false,
+    "accountNonLocked": false,
+    "credentialsNonExpired": false,
+    "enabled": true,
+    "email": "admin@ideazlab.co.uk"
+  },
+  {
+    "username": "employee",
+    "name": "employee",
+    "surname": "Release Ninja",
+    "password": "password",
+    "role": "USER",
+    "testData": false,
+    "accountNonExpired": false,
+    "accountNonLocked": false,
+    "credentialsNonExpired": false,
+    "enabled": true,
+    "email": "admin@ideazlab.co.uk"
+  }
+
+]

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="menu-content h-100" data-simplebar th:fragment="admin">
+  <ul class="metismenu left-sidenav-menu">
+    <li class="menu-label mt-0" >Administration</li>
+    <li th:if='${roles.get(0) == "CLIENT"}'>
+      <a href="widgets.html"><i data-feather="layers" class="align-self-center menu-icon"></i><span>Settings</span></a>
+    </li>
+    <li class="menu-label mt-0" >Project</li>
+    <li>
+      <a href="widgets.html"><i data-feather="layers" class="align-self-center menu-icon"></i><span>Projects</span></a>
+    </li>
+  </ul>
+</div>
+<div class="menu-content h-100" data-simplebar th:fragment="client">
+  <ul class="metismenu left-sidenav-menu">
+    <li class="menu-label mt-0" >Project</li>
+    <li>
+      <a href="widgets.html"><i data-feather="layers" class="align-self-center menu-icon"></i><span>Projects</span></a>
+    </li>
+  </ul>
+</div>
+<div class="menu-content h-100" data-simplebar th:fragment="user">
+  <ul class="metismenu left-sidenav-menu">
+    <li class="menu-label mt-0" >Project</li>
+    <li>
+      <a href="widgets.html"><i data-feather="layers" class="align-self-center menu-icon"></i><span>Projects</span></a>
+    </li>
+  </ul>
+</div>
+</body>
+</html>

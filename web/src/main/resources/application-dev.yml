@@ -1,0 +1,14 @@
+micronaut:
+  server:
+    port: 8081
+  security:
+    token:
+      jwt:
+        signatures:
+          secret:
+            generator:
+              secret: ${JWT_GENERATOR_SIGNATURE_SECRET:pleaseChangeThisSecretForANewOne}
+#  redis:
+#    uri: redis://127.0.0.1:6380
+mongodb:
+  uri: mongodb://releaseNinja:qwerty1234@localhost:27018/?serverSelectionTimeoutMS=5000&connectTimeoutMS=10000&authSource=admin&authMechanism=SCRAM-SHA-256

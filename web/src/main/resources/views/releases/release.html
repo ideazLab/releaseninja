@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/scripts::head}"></head>
+<body class="account-body accountbg">
+<div th:replace="~{fragments/navigation::left-sidenave(${projects})}"></div>
+<div class="page-wrapper">
+    <div th:replace="~{fragments/navigation::topbar}"></div>
+    <!-- Page Content-->
+    <div class="page-content">
+        <div class="container-fluid">
+            <!-- Page-Breadcrumb -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="page-title-box">
+                        <div class="row">
+                            <div class="col">
+                                <h4 class="page-title">
+                                    <a th:href="@{/projects/{id}(id=${release.project.id})}"
+                                       th:text="${release.project.name}"></a>
+                                </h4>
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a th:href="@{/releases}">Releases</a></li>
+                                    <li class="breadcrumb-item active" th:text="${release.version}"></li>
+
+                                </ol>
+                            </div><!--end col-->
+                            <div class="col-auto align-self-center">
+                                <a class="btn btn-sm btn-outline-primary" href="#" id="Dash_Date">
+                                    <span class="day-name" id="Day_Name">Today:</span>&nbsp;
+                                    <span class="" id="Select_date">Jan 11</span>
+                                    <i class="align-self-center icon-xs ms-1" data-feather="calendar"></i>
+                                </a>
+
+                            </div><!--end col-->
+                        </div><!--end row-->
+                    </div><!--end page-title-box-->
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col-md-11">
+                                    <h4 class="card-title">General Information</h4>
+                                    <p class="text-muted mb-0">Release basic information.</p>
+                                </div>
+                                <div class="col-md-1">
+                                    <a class="link-primary float-end"
+                                       data-bs-toggle="tooltip"
+                                       style="font-size: 14px;font-weight: bold;cursor: pointer" title="Edit General Information"
+                                       th:id="editReleaseInfo">
+                                        <i class="far fa-edit"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <form data-parsley-validate="" th:id="releaseGeneralInfoForm" th:object="${release}">
+                            <div class="card-body" style="min-height: 415px;">
+                                <input th:name="id" th:value="*{id}" type="hidden">
+                                <div class="mb-3">
+                                    <label class="form-label">Release Version</label>
+                                    <input aria-describedby="projectNameHelp" class="form-control" disabled
+                                           placeholder="Enter project name" th:name="version"
+                                           th:value="*{version}"
+                                           type="text">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" th:for="*{notes}">Release Notes</label>
+                                    <textarea class="form-control" disabled rows="10" th:id="notes"
+                                              th:name="description" th:text="*{notes}"></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" th:for="*{snapshot}">Snapshot</label>
+                                    <input type="checkbox" class="checkbox checkbox-primary"  th:id="snapshot" th:checked="*{snapshot}"></input>
+                                </div>
+                            </div>
+                            <div class="card-footer bg-light-alt m-0 clearfix">
+                                <button class="btn btn-secondary btn-sm float-end" disabled
+                                        th:id="editCurrentReleaseBtn"
+                                        type="submit"><i class="mdi mdi-refresh me-2"></i>update
+                                </button>
+                                <button class="btn btn-danger btn-sm float-end me-1" disabled
+                                        th:id="cancelReleaseGeneralInfoBtn"
+                                        type="button"><i class="mdi mdi-refresh me-2"></i>cancel
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col-md-11">
+                                    <h4 class="card-title">Artifacts</h4>
+                                    <p class="text-muted mb-0">Release artifacts</p>
+                                </div>
+                                <div class="col-md-1">
+                                    <a class="link-primary float-end" style="font-size: 14px;font-weight: bold;"
+                                       data-bs-toggle="tooltip" title="Add Artifact"
+                                       th:id="addArtifact">
+                                        <i class="far fa-plus-square" onclick="addArtifact()"
+                                           style="cursor: pointer; font-size: 14px;"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-body" style="min-height: 468px;">
+                            <div class="table-responsive">
+                                <table class="table mb-0" id="artifactsTable"
+                                       th:object="${release}">
+                                    <thead class="thead-light">
+                                    <tr>
+                                        <th><span class="ps-3">Group</span></th>
+                                        <th><span class="ps-3">Name</span></th>
+                                        <th><span class="ps-3">Version</span></th>
+                                        <th><span class="ps-3">Type</span></th>
+                                        <th><span class="ps-3">Visibility</span></th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <fieldset class="" data-repeater-list="artifacts" id="artifacts">
+                                        <tr data-repeater-item th:classappend="${artifact.validated} ?  table-primary : table-warning "
+                                            th:each="artifact : *{artifacts}">
+                                            <td>
+                                                <div class="ps-3" th:text="${artifact.group}"></div>
+                                            </td>
+                                            <td>
+                                                <div class="ps-3" th:text="${artifact.name}"></div>
+                                            </td>
+                                            <td>
+                                                <div class="ps-3" th:text="${artifact.version}"></div>
+                                            </td>
+                                            <td>
+                                                <div class="ps-3" th:text="${artifact.type}"></div>
+                                            </td>
+                                            <td>
+                                                <div class="ps-3" th:text="${artifact.visibility}"></div>
+                                            </td>
+                                            <td style="width: 15%">
+                                                <a class="link-danger pe-2 float-end" data-bs-toggle="tooltip"
+                                                   style="cursor: pointer"
+                                                   th:attr="onclick=|deleteArtifact('*{id}','${artifact.artifactId}','${artifact.name}')|"
+                                                   title="Delete Artifact">
+                                                    <i class="far fa-trash-alt"></i>
+                                                </a>
+                                                <a class="link-success ms-1 me-1 float-end" data-bs-toggle="tooltip"
+                                                   style="cursor: pointer"
+                                                   th:attr="onclick=|validateArtifact('*{id}','${artifact.artifactId}')|"
+                                                   th:unless="${artifact.validated}" title="Validate Artifact">
+                                                    <i class="far fa-check-circle"></i>
+                                                </a>
+                                                <a class="link-primary ms-1 me-1 float-end" data-bs-toggle="tooltip"
+                                                   style="cursor: pointer" th:attr="onclick=|editArtifact('${artifact.artifactId}','${artifact.name}','${artifact.group}','${artifact.version}','${artifact.type}','${artifact.visibility}','*{id}')|"
+                                                   th:unless="${artifact.validated}"
+                                                   title="Edit Artifact"><i
+                                                        class="far fa-edit"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </fieldset>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col-md-11">
+                                    <h4 class="card-title">Settings</h4>
+                                    <p class="text-muted mb-0">Release specific settings </p>
+                                </div>
+                                <div class="col-md-1">
+                                    <a class="link-primary float-end" style="cursor: pointer;">
+                                        <i class="far fa-edit"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <form>
+                            <div class="card-body" style="min-height: 415px;"></div>
+                            <div class="card-footer bg-light-alt m-0 clearfix">
+                                <button class="btn btn-secondary btn-sm float-end" disabled
+                                        th:id="editReleaseSettingsBtn"
+                                        type="submit"><i class="mdi mdi-refresh me-2"></i>update
+                                </button>
+                                <button class="btn btn-danger btn-sm float-end me-1" disabled
+                                        th:id="cancelReleaseSettingsBtn"
+                                        type="button"><i class="mdi mdi-refresh me-2"></i>cancel
+                                </button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- container -->
+
+        <footer th:replace="~{fragments/misc::footer}"></footer>
+    </div>
+    <!-- end page content -->
+</div>
+<span th:replace="~{/fragments/scripts::main}"/>
+<span th:replace="~{/fragments/scripts::datatables}"/>
+<!-- App js -->
+<script src="/static/js/app.js"></script>
+<!--Wysiwig js-->
+<script referrerpolicy="origin"
+        src="https://cdn.tiny.cloud/1/sxfvue9entyogmt7cbkd7v3f5dzj28yd766g9ezb18pcjm3e/tinymce/6/tinymce.min.js"></script>
+<script src="/static/pages/jquery.form-editor.init.js"></script>
+<script type="text/javascript">
+    (function () {
+        $("#editReleaseInfo").on("click", function () {
+            $("#releaseGeneralInfoForm :input").prop("disabled", false);
+            tinymce.init({
+                selector: '#notes',
+                height: 400,
+                plugins: [
+                    'advlist autolink link image lists charmap print preview hr anchor pagebreak',
+                    'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
+                    'table emoticons template paste help'
+                ],
+                toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | ' +
+                    'bullist numlist outdent indent | link image | print preview media fullpage | ' +
+                    'forecolor backcolor emoticons | help',
+                menu: {
+                    favs: {title: 'My Favorites', items: 'code visualaid | searchreplace | emoticons'}
+                },
+                menubar: 'favs file edit view insert format tools table help',
+                content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px; color: #7c8ea7; }'
+            });
+
+        });
+        $("#cancelReleaseGeneralInfoBtn").on("click", function () {
+            tinymce.get(notes).hide();
+            $("#releaseGeneralInfoForm :input").prop("disabled", true);
+        });
+
+    })();
+    const validateArtifact = ($release, $artifact) => {
+        console.log($release, $artifact)
+        submitForm("GET", "/releases/artifact/validate/" + $release + "/" + $artifact, '', '')
+    }
+</script>
+<div th:replace="~{/fragments/modals/release::edit-artifact(${release.id},${artifactTypes},${artifactVisibilities})}"></div>
+<div th:replace="~{/fragments/modals/release::add-artifact(${release.id},${artifactTypes},${artifactVisibilities})}"></div>
+<div th:replace="~{/fragments/modals/release::delete-artifact}"></div>
+
+</body>
+</html>

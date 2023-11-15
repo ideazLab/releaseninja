@@ -1,0 +1,25 @@
+version: "3.8"
+services:
+  mongodb:
+    image: 'mongo:latest'
+    container_name: rn_mongodb
+    restart: always
+    logging:
+      options:
+        max-size: 1g
+    ports:
+      - 27018:27017
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=releaseNinja
+      - MONGO_INITDB_ROOT_PASSWORD=qwerty1234
+  zipkin:
+    image: openzipkin/zipkin:latest-arm64
+    container_name: rn_zipkin
+    restart: always
+    ports:
+      - 9411:9411
+volumes:
+  cache:
+    driver: local
+
+

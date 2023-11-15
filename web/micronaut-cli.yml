@@ -1,0 +1,6 @@
+applicationType: default
+defaultPackage: com.fitltd.releaseit
+testFramework: junit
+sourceLanguage: kotlin
+buildTool: gradle_kotlin
+features: [annotation-api, app-name, asciidoctor, assertj, awaitility, cache-caffeine, crac, data, data-mongodb, email-javamail, email-template, flyway, graalvm, gradle, hibernate-validator, http-client, http-session, jackson-databind, jib, junit, junit-params, kotlin, kotlin-application, kotlin-build, kotlin-extension-functions, logback, management, micronaut-aop, micronaut-aot, micronaut-build, netflix-hystrix, netty-server, reactor, reactor-http-client, readme, security, security-annotations, security-jwt, shade, test-resources, tracing-opentelemetry-annotations, tracing-opentelemetry-exporter-zipkin, tracing-opentelemetry-http, tracing-opentelemetry-zipkin, views-thymeleaf, yaml]

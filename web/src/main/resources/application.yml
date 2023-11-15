@@ -1,0 +1,58 @@
+micronaut:
+  application:
+    name: release_ninja
+  security:
+    authentication: cookie
+    redirect:
+      login-failure: /login/authFailed
+      unauthorized:
+        url: /login/auth
+      forbidden:
+        url: /errors/forbidden
+        enabled: true
+    intercept-url-map:
+      - pattern: "/static/**"
+        http-method: GET
+        access:
+          isAnonymous()
+    endpoints:
+      logout:
+        get-allowed: true
+  router:
+    static-resources:
+      default:
+        enabled: true
+        mapping: "/static/**"
+        paths: "classpath:static"
+  session:
+    http:
+      cookie: true
+      header: true
+  views:
+    thymeleaf:
+      enabled: true
+#  redis:
+#    io-thread-pool-size: 5
+#    computation-thread-pool-size: 4
+#    timeout: 30s
+#    caches:
+#      ninja:
+#        expire-after-write: 1h
+flyway:
+  datasources:
+    default:
+      enabled: true
+
+#otel:
+#  traces:
+#    exporter: zipkin
+#  exclusions:
+#  - /health
+netty:
+  default:
+    allocator:
+      max-order: 3
+hystrix.stream.enabled: false
+mongodb:
+  package-names:
+    - com.ideazlab.releaseninja

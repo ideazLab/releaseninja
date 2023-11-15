@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="new-project">
+    <div aria-hidden="true" aria-labelledby="newprojectLabel" class="modal fade bd-example-modal-lg" id="newproject"
+         role="dialog" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered " id="projectModal" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title m-0" id="myLargeModalLabel">New Project</h6>
+                    <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="mb-3 row">
+                                <div class="col-sm-12">
+                                    <input class="form-control" id="projectName" placeholder="Project Name" required
+                                           type="text">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label class="form-label" for="projectDescription">Description</label>
+                                <textarea class="form-control" id="projectDescription" required rows="5"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" id="newProjectError" style="display: none">
+                        <div class="col-md-12">
+                            <div class="mb-3 text-danger">
+                                All fields are required
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-soft-primary btn-sm" onclick="submit()" type="button">Save changes</button>
+                    <button class="btn btn-soft-secondary btn-sm" data-bs-dismiss="modal" type="button">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        const submit = () => {
+            // TODO change to parley form validation
+            let name = document.getElementById("projectName").value
+            let description = document.getElementById("projectDescription").value
+            let newProjectError = document.getElementById("newProjectError")
+            if ((description === "") || (name === "")) {
+                newProjectError.style.display = "block"
+                console.log("error")
+            } else {
+                newProjectError.style.display = "none"
+                console.log("no error")
+                submitForm("POST", "/projects", 'application/json', JSON.stringify({
+                    name: name,
+                    description: description
+                }))
+            }
+        }
+    </script>
+</div>
+<script th:fragment="delete-project" type="text/javascript">
+    const deleteProject = ($id, $name) => {
+        Swal.fire({
+            title: 'Do you want to delete project ' + $name + '?',
+            showCancelButton: true,
+            confirmButtonText: 'Delete',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // submitForm("POST", "/releases/artifact/delete", 'application/json',
+                //     JSON.stringify({id:$id,artifactId:$aritfactId,name:$name}))
+            }
+        })
+    }
+</script>
+</body>
+</html>
