@@ -1,1 +1,0 @@
-# Release Ninja! Common Module 🚀
